@@ -1,0 +1,26 @@
+[project]
+name = "openscad-mcp"
+version = "0.1.0"
+description = "An MCP server for creating, editing, rendering, and exporting OpenSCAD models with a PNG preview feedback loop."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "nliya" }]
+keywords = ["mcp", "openscad", "cad", "3d", "modeling"]
+dependencies = [
+    "mcp[cli]>=1.2.0",
+    "pillow>=10.0.0",
+]
+
+[project.scripts]
+openscad-mcp = "openscad_mcp.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/openscad_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
