@@ -1,4 +1,4 @@
-# OpenscadMCP
+# openscad-mcp
 
 An [MCP](https://modelcontextprotocol.io) server that lets an LLM **create, edit, render, and export [OpenSCAD](https://openscad.org) models** — with a PNG preview feedback loop so the model can *see* what it built and iterate.
 
@@ -63,6 +63,31 @@ Add to your MCP client (e.g. Claude Desktop `claude_desktop_config.json`, or Kir
 }
 ```
 
+**If your install path contains a space** (e.g. `~/Library/Application Support/...`),
+the `.venv/bin/openscad-mcp` console script will fail — a space breaks the
+script's shebang line. Launch the module through the interpreter instead, which
+takes the path as a plain argument and is unaffected:
+
+```json
+{
+  "mcpServers": {
+    "openscad": {
+      "command": "/absolute/path/to/openscad-mcp-main/.venv/bin/python",
+      "args": ["-m", "openscad_mcp"],
+      "env": {
+        "OPENSCAD_MCP_WORKSPACE": "/absolute/path/to/your/workspace"
+      }
+    }
+  }
+}
+```
+
+> **macOS note:** apps launched from Finder (like Claude Desktop) can't read
+> `~/Documents`, `~/Desktop`, or `~/Downloads` without a Full Disk Access grant.
+> If the server fails to start with `Operation not permitted` on `pyvenv.cfg`,
+> either grant the app access under System Settings → Privacy & Security, or
+> keep the project outside those protected folders.
+
 ## Tools
 
 | Tool | Purpose |
@@ -106,7 +131,9 @@ auto-framed camera presets — no need to compute camera distances:
 
 ### Parametric overrides (`defines`)
 
-`validate_model`, `render_preview`, and `export_model` accept a `defines` object mapping variable names to values, equivalent to OpenSCAD's `-D`:
+`validate_model`, `render_preview`, `render_views`, `measure_model`, and
+`export_model` accept a `defines` object mapping variable names to values,
+equivalent to OpenSCAD's `-D`:
 
 ```json
 { "path": "box.scad", "defines": { "width": 40, "rounded": true } }
@@ -142,4 +169,3 @@ difference() {
 ## License
 
 MIT
-
